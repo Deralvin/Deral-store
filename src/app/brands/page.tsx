@@ -15,7 +15,7 @@ import {
 import AdminLayout from '@/components/layout/AdminLayout';
 import { Brand } from '@/types/fashion';
 import { useToast } from '@/components/ui/Toast';
-import { useApiAuth } from '@/contexts/AuthContext';
+import { useApiAuth, apiFetch } from '@/contexts/AuthContext';
 
 export default function BrandsPage() {
   const [brands, setBrands] = useState<Brand[]>([]);
@@ -35,7 +35,7 @@ export default function BrandsPage() {
   const fetchBrands = async () => {
     try {
       setLoading(true);
-      const res = await fetch('/api/brands', apiAuth);
+      const res = await apiFetch('/api/brands', apiAuth);
       const data = await res.json();
       if (data.success) {
         setBrands(data.data);
@@ -59,7 +59,7 @@ export default function BrandsPage() {
     }
 
     try {
-      const res = await fetch('/api/brands', {
+      const res = await apiFetch('/api/brands', {
         method: 'POST',
         ...apiAuth,
         body: JSON.stringify(formData),
@@ -82,7 +82,7 @@ export default function BrandsPage() {
     if (!confirm(`Hapus brand "${name}"?`)) return;
 
     try {
-      const res = await fetch(`/api/brands/${id}`, { method: 'DELETE', ...apiAuth });
+      const res = await apiFetch(`/api/brands/${id}`, { method: 'DELETE', ...apiAuth });
       const data = await res.json();
       if (data.success) {
         showToast(`Brand "${name}" berhasil dihapus`, 'success');

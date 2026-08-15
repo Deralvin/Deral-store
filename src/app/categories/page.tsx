@@ -15,7 +15,7 @@ import {
 import AdminLayout from '@/components/layout/AdminLayout';
 import { Category } from '@/types/fashion';
 import { useToast } from '@/components/ui/Toast';
-import { useApiAuth } from '@/contexts/AuthContext';
+import { useApiAuth, apiFetch } from '@/contexts/AuthContext';
 
 export default function CategoriesPage() {
   const [categories, setCategories] = useState<Category[]>([]);
@@ -36,7 +36,7 @@ export default function CategoriesPage() {
   const fetchCategories = async () => {
     try {
       setLoading(true);
-      const res = await fetch('/api/categories', apiAuth);
+      const res = await apiFetch('/api/categories', apiAuth);
       const data = await res.json();
       if (data.success) {
         setCategories(data.data);
@@ -79,7 +79,7 @@ export default function CategoriesPage() {
     try {
       let res;
       if (editingCategory) {
-        res = await fetch(`/api/categories/${editingCategory.id}`, {
+        res = await apiFetch(`/api/categories/${editingCategory.id}`, {
           method: 'PUT',
           ...apiAuth,
           body: JSON.stringify({
@@ -90,7 +90,7 @@ export default function CategoriesPage() {
           }),
         });
       } else {
-        res = await fetch('/api/categories', {
+        res = await apiFetch('/api/categories', {
           method: 'POST',
           ...apiAuth,
           body: JSON.stringify({
@@ -122,7 +122,7 @@ export default function CategoriesPage() {
     if (!confirm(`Hapus kategori "${name}"?`)) return;
 
     try {
-      const res = await fetch(`/api/categories/${id}`, { method: 'DELETE', ...apiAuth });
+      const res = await apiFetch(`/api/categories/${id}`, { method: 'DELETE', ...apiAuth });
       const data = await res.json();
       if (data.success) {
         showToast(`Kategori "${name}" berhasil dihapus`, 'success');

@@ -16,7 +16,7 @@ import {
 } from 'lucide-react';
 import AdminLayout from '@/components/layout/AdminLayout';
 import { useToast } from '@/components/ui/Toast';
-import { useApiAuth } from '@/contexts/AuthContext';
+import { useApiAuth, apiFetch } from '@/contexts/AuthContext';
 
 interface AdminUser {
   id: number;
@@ -49,7 +49,7 @@ export default function AdminUsersPage() {
   const fetchAdmins = async () => {
     try {
       setLoading(true);
-      const res = await fetch('/api/admin/users', apiAuth);
+      const res = await apiFetch('/api/admin/users', apiAuth);
       const data = await res.json();
       if (data.success) {
         setAdmins(data.data);
@@ -74,7 +74,7 @@ export default function AdminUsersPage() {
       const url = editingAdmin ? `/api/admin/users/${editingAdmin.id}` : '/api/admin/users';
       const method = editingAdmin ? 'PUT' : 'POST';
 
-      const res = await fetch(url, {
+      const res = await apiFetch(url, {
         method,
         ...apiAuth,
         body: JSON.stringify(formData),
@@ -115,7 +115,7 @@ export default function AdminUsersPage() {
     if (!confirm('Yakin ingin menghapus admin ini?')) return;
 
     try {
-      const res = await fetch(`/api/admin/users/${id}`, { method: 'DELETE', ...apiAuth });
+      const res = await apiFetch(`/api/admin/users/${id}`, { method: 'DELETE', ...apiAuth });
       const data = await res.json();
 
       if (!res.ok) {

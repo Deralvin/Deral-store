@@ -21,7 +21,7 @@ import AdminLayout from '@/components/layout/AdminLayout';
 import AddProductModal from '@/components/products/AddProductModal';
 import { DashboardStats } from '@/types/fashion';
 import { useToast } from '@/components/ui/Toast';
-import { useApiAuth } from '@/contexts/AuthContext';
+import { useApiAuth, apiFetch } from '@/contexts/AuthContext';
 
 export default function DashboardPage() {
   const [stats, setStats] = useState<DashboardStats | null>(null);
@@ -33,7 +33,7 @@ export default function DashboardPage() {
   const fetchStats = async () => {
     try {
       setLoading(true);
-      const res = await fetch('/api/dashboard/stats', apiAuth);
+      const res = await apiFetch('/api/dashboard/stats', apiAuth);
       const data = await res.json();
       if (data.success) {
         setStats(data.data);

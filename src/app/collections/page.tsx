@@ -16,7 +16,7 @@ import {
 import AdminLayout from '@/components/layout/AdminLayout';
 import { Collection } from '@/types/fashion';
 import { useToast } from '@/components/ui/Toast';
-import { useApiAuth } from '@/contexts/AuthContext';
+import { useApiAuth, apiFetch } from '@/contexts/AuthContext';
 
 export default function CollectionsPage() {
   const [collections, setCollections] = useState<Collection[]>([]);
@@ -36,7 +36,7 @@ export default function CollectionsPage() {
   const fetchCollections = async () => {
     try {
       setLoading(true);
-      const res = await fetch('/api/collections', apiAuth);
+      const res = await apiFetch('/api/collections', apiAuth);
       const data = await res.json();
       if (data.success) {
         setCollections(data.data);
@@ -60,7 +60,7 @@ export default function CollectionsPage() {
     }
 
     try {
-      const res = await fetch('/api/collections', {
+      const res = await apiFetch('/api/collections', {
         method: 'POST',
         ...apiAuth,
         body: JSON.stringify(formData),
@@ -88,7 +88,7 @@ export default function CollectionsPage() {
     if (!confirm(`Hapus koleksi "${name}"?`)) return;
 
     try {
-      const res = await fetch(`/api/collections/${id}`, { method: 'DELETE', ...apiAuth });
+      const res = await apiFetch(`/api/collections/${id}`, { method: 'DELETE', ...apiAuth });
       const data = await res.json();
       if (data.success) {
         showToast(`Koleksi "${name}" berhasil dihapus`, 'success');

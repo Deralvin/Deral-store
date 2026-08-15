@@ -14,3 +14,28 @@ export function getAuthUser(request: NextRequest) {
   if (!token) return null;
   return verifyJWT(token);
 }
+
+let logoutHandler: (() => void) | null = null;
+
+export function setLogoutHandler(handler: () => void) {
+  logoutHandler = handler;
+}
+
+export async function apiFetch(input: string, init: RequestInit = {}) {
+  const res = await fetch(input, {
+    ...init,
+    headers: {
+      ...init.headers,
+    },
+  });
+
+  if (res.status === 401) {
+    if (logoutHandler) {
+      logoutHandler();
+    } else if (typeof window !== 'undefined') {
+      window.location.href = '/login';
+    }
+  }
+
+  return res;
+}

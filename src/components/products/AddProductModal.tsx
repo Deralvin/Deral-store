@@ -4,7 +4,7 @@ import React, { useState, useEffect } from 'react';
 import { X, Sparkles, Image as ImageIcon } from 'lucide-react';
 import { useToast } from '../ui/Toast';
 import { Category } from '@/types/fashion';
-import { useApiAuth } from '@/contexts/AuthContext';
+import { useApiAuth, apiFetch } from '@/contexts/AuthContext';
 
 interface AddProductModalProps {
   isOpen: boolean;
@@ -39,7 +39,7 @@ export default function AddProductModal({ isOpen, onClose, onSuccess }: AddProdu
 
   const fetchCategories = async () => {
     try {
-      const res = await fetch('/api/categories', apiAuth);
+      const res = await apiFetch('/api/categories', apiAuth);
       const data = await res.json();
       if (data.success && data.data.length > 0) {
         setCategories(data.data);
@@ -63,7 +63,7 @@ export default function AddProductModal({ isOpen, onClose, onSuccess }: AddProdu
 
     setLoading(true);
     try {
-      const res = await fetch('/api/products', {
+      const res = await apiFetch('/api/products', {
         method: 'POST',
         ...apiAuth,
         body: JSON.stringify({

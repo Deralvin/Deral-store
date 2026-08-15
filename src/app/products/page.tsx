@@ -17,7 +17,7 @@ import AdminLayout from '@/components/layout/AdminLayout';
 import AddProductModal from '@/components/products/AddProductModal';
 import { Product, Category } from '@/types/fashion';
 import { useToast } from '@/components/ui/Toast';
-import { useApiAuth } from '@/contexts/AuthContext';
+import { useApiAuth, apiFetch } from '@/contexts/AuthContext';
 
 export default function ProductsPage() {
   const [products, setProducts] = useState<Product[]>([]);
@@ -36,7 +36,7 @@ export default function ProductsPage() {
       if (categoryFilter !== 'all') url += `category=${encodeURIComponent(categoryFilter)}&`;
       if (search) url += `search=${encodeURIComponent(search)}&`;
 
-      const res = await fetch(url, apiAuth);
+      const res = await apiFetch(url, apiAuth);
       const data = await res.json();
       if (data.success) {
         setProducts(data.data);
@@ -50,7 +50,7 @@ export default function ProductsPage() {
 
   const fetchCategories = async () => {
     try {
-      const res = await fetch('/api/categories', apiAuth);
+      const res = await apiFetch('/api/categories', apiAuth);
       const data = await res.json();
       if (data.success) {
         setCategories(data.data);
@@ -75,7 +75,7 @@ export default function ProductsPage() {
     if (!confirm(`Apakah Anda yakin ingin menghapus produk "${name}" dari katalog?`)) return;
 
     try {
-      const res = await fetch(`/api/products/${id}`, { method: 'DELETE', ...apiAuth });
+      const res = await apiFetch(`/api/products/${id}`, { method: 'DELETE', ...apiAuth });
       const data = await res.json();
       if (data.success) {
         showToast(`Produk "${name}" berhasil dihapus`, 'error');
@@ -100,7 +100,7 @@ export default function ProductsPage() {
     }
 
     try {
-      const res = await fetch(`/api/products/${product.id}/stock`, {
+      const res = await apiFetch(`/api/products/${product.id}/stock`, {
         method: 'PUT',
         ...apiAuth,
         body: JSON.stringify({ stock: newStock }),

@@ -17,7 +17,7 @@ import {
 import AdminLayout from '@/components/layout/AdminLayout';
 import { Discount } from '@/types/fashion';
 import { useToast } from '@/components/ui/Toast';
-import { useApiAuth } from '@/contexts/AuthContext';
+import { useApiAuth, apiFetch } from '@/contexts/AuthContext';
 
 export default function DiscountsPage() {
   const [discounts, setDiscounts] = useState<Discount[]>([]);
@@ -40,7 +40,7 @@ export default function DiscountsPage() {
   const fetchDiscounts = async () => {
     try {
       setLoading(true);
-      const res = await fetch('/api/discounts', apiAuth);
+      const res = await apiFetch('/api/discounts', apiAuth);
       const data = await res.json();
       if (data.success) {
         setDiscounts(data.data);
@@ -64,7 +64,7 @@ export default function DiscountsPage() {
     }
 
     try {
-      const res = await fetch('/api/discounts', {
+      const res = await apiFetch('/api/discounts', {
         method: 'POST',
         ...apiAuth,
         body: JSON.stringify({
@@ -102,7 +102,7 @@ export default function DiscountsPage() {
 
   const handleToggleActive = async (discount: Discount) => {
     try {
-      const res = await fetch(`/api/discounts/${discount.id}`, {
+      const res = await apiFetch(`/api/discounts/${discount.id}`, {
         method: 'PUT',
         ...apiAuth,
         body: JSON.stringify({ is_active: !discount.is_active }),
@@ -121,7 +121,7 @@ export default function DiscountsPage() {
     if (!confirm(`Hapus voucher "${code}"?`)) return;
 
     try {
-      const res = await fetch(`/api/discounts/${id}`, { method: 'DELETE', ...apiAuth });
+      const res = await apiFetch(`/api/discounts/${id}`, { method: 'DELETE', ...apiAuth });
       const data = await res.json();
       if (data.success) {
         showToast(`Voucher "${code}" berhasil dihapus`, 'success');

@@ -20,7 +20,7 @@ import AdminLayout from '@/components/layout/AdminLayout';
 import { Order } from '@/types/fashion';
 import { useToast } from '@/components/ui/Toast';
 import CreateOrderModal from '@/components/orders/CreateOrderModal';
-import { useApiAuth } from '@/contexts/AuthContext';
+import { useApiAuth, apiFetch } from '@/contexts/AuthContext';
 
 export default function OrdersPage() {
   const [orders, setOrders] = useState<Order[]>([]);
@@ -35,7 +35,7 @@ export default function OrdersPage() {
   const fetchOrders = async () => {
     try {
       setLoading(true);
-      const res = await fetch('/api/orders', apiAuth);
+      const res = await apiFetch('/api/orders', apiAuth);
       const data = await res.json();
       if (data.success) {
         setOrders(data.data);
@@ -53,7 +53,7 @@ export default function OrdersPage() {
 
   const handleUpdateStatus = async (orderId: string, newStatus: string) => {
     try {
-      const res = await fetch(`/api/orders/${orderId}/status`, {
+      const res = await apiFetch(`/api/orders/${orderId}/status`, {
         method: 'PUT',
         ...apiAuth,
         body: JSON.stringify({ status: newStatus }),
@@ -72,7 +72,7 @@ export default function OrdersPage() {
 
   const handleMarkAsPaid = async (orderId: string, orderNumber: string) => {
     try {
-      const res = await fetch(`/api/orders/${orderId}/payment`, {
+      const res = await apiFetch(`/api/orders/${orderId}/payment`, {
         method: 'PUT',
         ...apiAuth,
         body: JSON.stringify({ payment_status: 'paid' }),
@@ -93,7 +93,7 @@ export default function OrdersPage() {
     if (!confirm(`Batalkan pesanan ${orderNumber}? Stok produk akan otomatis dikembalikan ke gudang.`)) return;
 
     try {
-      const res = await fetch(`/api/orders/${orderId}/cancel`, {
+      const res = await apiFetch(`/api/orders/${orderId}/cancel`, {
         method: 'PUT',
         ...apiAuth,
         body: JSON.stringify({ reason: 'Dibatalkan oleh Admin' }),

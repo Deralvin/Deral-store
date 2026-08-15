@@ -2,6 +2,7 @@
 
 import { createContext, useContext, useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
+import { setLogoutHandler } from '@/lib/api-auth';
 
 interface AuthContextType {
   user: { username: string; role: string } | null;
@@ -42,6 +43,12 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       .catch(() => setUser(null))
       .finally(() => setIsLoading(false));
   }, []);
+
+  useEffect(() => {
+    setLogoutHandler(() => {
+      router.push('/login');
+    });
+  }, [router]);
 
   const clearAllAuth = () => {
     setUser(null);
@@ -92,3 +99,5 @@ export function useApiAuth() {
     credentials: 'include' as const,
   };
 }
+
+export { apiFetch } from '@/lib/api-auth';

@@ -5,7 +5,7 @@ import { Users, Search, RefreshCw, Sparkles, MapPin } from 'lucide-react';
 import AdminLayout from '@/components/layout/AdminLayout';
 import { Customer } from '@/types/fashion';
 import { useToast } from '@/components/ui/Toast';
-import { useApiAuth } from '@/contexts/AuthContext';
+import { useApiAuth, apiFetch } from '@/contexts/AuthContext';
 
 export default function CustomersPage() {
   const [customers, setCustomers] = useState<Customer[]>([]);
@@ -17,7 +17,7 @@ export default function CustomersPage() {
   const fetchCustomers = async () => {
     try {
       setLoading(true);
-      const res = await fetch('/api/customers', apiAuth);
+      const res = await apiFetch('/api/customers', apiAuth);
       const data = await res.json();
       if (data.success) {
         setCustomers(data.data);
