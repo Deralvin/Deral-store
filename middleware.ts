@@ -8,12 +8,14 @@ export function middleware(request: NextRequest) {
     if (token) {
       return NextResponse.redirect(new URL('/', request.url));
     }
+
     return NextResponse.next();
   }
 
   if (!token) {
     const loginUrl = new URL('/login', request.url);
     loginUrl.searchParams.set('from', pathname);
+
     return NextResponse.redirect(loginUrl);
   }
 
@@ -21,5 +23,7 @@ export function middleware(request: NextRequest) {
 }
 
 export const config = {
-  matcher: ['/((?!login|api/auth).*)'],
+  matcher: [
+    '/((?!login|api/auth|_next/static|_next/image|favicon.ico).*)',
+  ],
 };
