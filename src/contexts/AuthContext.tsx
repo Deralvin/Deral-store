@@ -35,13 +35,20 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     const storedToken = typeof window !== 'undefined' ? localStorage.getItem('aura_admin_token') : null;
     setToken(storedToken);
 
+    const timeout = setTimeout(() => {
+      setIsLoading(false);
+    }, 3000);
+
     fetch('/api/auth/me', { credentials: 'include' })
       .then(res => (res.ok ? res.json() : null))
       .then(data => {
         setUser(data?.user || null);
       })
       .catch(() => setUser(null))
-      .finally(() => setIsLoading(false));
+      .finally(() => {
+        clearTimeout(timeout);
+        setIsLoading(false);
+      });
   }, []);
 
   useEffect(() => {
