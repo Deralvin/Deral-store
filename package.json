@@ -7,7 +7,7 @@
     "build": "next build",
     "start": "next start",
     "lint": "eslint",
-    "db:migrate": "PGHOST=$DB_HOST PGPORT=$DB_PORT PGDATABASE=$DB_NAME PGUSER=$DB_USER PGPASSWORD=$DB_PASSWORD psql -f migrations/002_create_admin_users_table.sql",
+    "db:migrate": "node scripts/db-migrate.cjs",
     "db:seed": "node scripts/seed-admin.cjs"
   },
   "dependencies": {
