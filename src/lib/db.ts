@@ -6,6 +6,7 @@ const pool = new Pool({
   database: process.env.DB_NAME || 'deral-fashion',
   user: process.env.DB_USER || 'admin',
   password: process.env.DB_PASSWORD || undefined,
+  ssl: process.env.DB_SSL === 'true' ? { rejectUnauthorized: false } : undefined,
   max: 20,
   idleTimeoutMillis: 30000,
   connectionTimeoutMillis: 5000,
